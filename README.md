@@ -5,8 +5,6 @@
 Τα αποτελέσματα που περιέχουν, αφορούν το μέγιστο μέγεθος των datasetsμε τα οποία μπορούσαμε να τα τρέξουμε τοπικά.
 Σχεδιαστικές επιλογές, επεξηγήσεις και σχολιασμός για τα notebooks παρέχονται μέσα στα ίδια τα notebooks.
 
-Για να τρέξει η εργασία χρειάζονται τα dependencies που αναγράφονται στο dependencies.txt και σε ξεχωριστό directory
-το GoogleNews-vectors-negative300.bin (part2)  (GoogleNews-vectors-negative300.bin/GoogleNews-vectors-negative300.bin)
 
 timespan: May'96 - Sep'23
 
