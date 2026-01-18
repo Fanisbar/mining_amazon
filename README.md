@@ -9,7 +9,8 @@
 timespan: May'96 - Sep'23
 
 
-
+Ο λόγος που έχουμε κάποιο overlap στο clustering και όχι ιδιαίτερα ψηλό silhouette score είναι επειδή
+είναι nlp task και το κείμενο πολύ συχνά κάνει overlap σε νοήματα κλπ
 
 
 
