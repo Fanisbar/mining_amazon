@@ -11,15 +11,10 @@ timespan: May'96 - Sep'23
 
 
 Ο λόγος που έχουμε κάποιο overlap στο clustering και όχι ιδιαίτερα ψηλό silhouette score είναι επειδή
-είναι nlp task και το κείμενο πολύ συχνά κάνει overlap σε νοήματα κλπ
+είναι nlp task και το κείμενο πολύ συχνά κάνει overlap σε νοήματα κλπ, επίσης όταν αυξάνονται οι
+διαστάσεις(tf idf features, η ευκλείδια απόσταση χάνει το νόημά της) να χρησιμοποιήσω το curse of dimensionality
 
 Ο λόλος που το k range ξεκινάει από 5 είναι επειδή παρατηρήθηκε ότι αν ξεκινούσαμε κάτω από 5 τότε δύο κατηγορίες
 έβρισκαν βέλτιστο k το 4 και κάποια clusters ήταν σχεδόν άδεια που σημαίνει ότι το ιδανικό θα ήταν είτε
 λιγότερα clusters(που δεν θα είχε νόημα) είτε περισσότερα. Οπότε ορίζοντας υποχρεωτικά κατ'ελάχιστο 5 clusters
 πετυχαίνουμε καλό αποτέλεσμα clustering
-
-
-todo:
-fix recall scores in recommendation system
-fix reviewing results of recommendation system
-add comments and textual analysis of the results
