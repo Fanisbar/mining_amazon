@@ -10,6 +10,7 @@ Data mining project for amazon's datasets. Work in progress
 timespan: May'96 - Sep'23
 
 
+Εξηγήσεις:
 Ο λόγος που έχουμε κάποιο overlap στο clustering και όχι ιδιαίτερα ψηλό silhouette score είναι επειδή
 είναι nlp task και το κείμενο πολύ συχνά κάνει overlap σε νοήματα κλπ, επίσης όταν αυξάνονται οι
 διαστάσεις(tf idf features, η ευκλείδια απόσταση χάνει το νόημά της) να χρησιμοποιήσω το curse of dimensionality
