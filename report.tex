@@ -1,0 +1,162 @@
+\documentclass[a4paper, 12pt]{article}
+
+% --- Language and Encoding ---
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel} % English language only
+
+% --- Formatting Packages ---
+\usepackage{geometry}
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\usepackage{graphicx} % For images/plots
+\usepackage{float}    % For accurate image placement
+\usepackage{hyperref} % For hyperlinks
+\usepackage{caption}
+\usepackage{subcaption} % For side-by-side plots
+\usepackage{amsmath}    % For math equations
+
+% --- Code Highlighting Package ---
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Code Style Settings
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% --- Title Information ---
+\title{\textbf{Data Mining \& Analysis on Amazon Datasets}}
+\author{Barmparosos Theofanis}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report presents a comprehensive data mining and analysis study conducted on large-scale Amazon datasets. The project is divided into two complimentary parts. Part 1 mainly focuses on Exploratory Data Analysis (EDA) and Sentiment Analysis to explore user reviews, ratings and the overall structure of the datasets. Part 2 involves text pre-processing, clustering of products to group them into subsets, recommendation system and frequent pattern mining to uncover association rules and purchasing patterns. The work is focused on searching(mining) for useful and interesting information on large scale datasets, the characteristics of which we don't know apriori. The Amazon product categories that were used are the following 5: "Appliances", "All\_Beauty", "Musical\_Instruments", "Software" and "Video\_Games".
+\end{abstract}
+
+
+\tableofcontents
+\newpage
+
+\section{Project Structure and Technical Setup}
+
+% ===================================================================
+% PART 1
+% ===================================================================
+
+This project is implemented in Python using Jupyter notebooks and is organized into two main parts, corresponding to the two analytical phases of the study:
+
+\section{Part 1: Sentiment Analysis \& EDA}
+
+\subsection{Introduction to Part 1}
+The objective of this section is to analyze the relationship between user ratings and the textual content of reviews. We utilize Natural Language Processing (NLP) techniques to compute sentiment scores and correlate them with the star ratings.
+
+\subsection{Data Preprocessing}
+Description of the cleaning steps performed in \texttt{part1.ipynb}.
+\begin{itemize}
+    \item Handling missing values in \texttt{reviewText}.
+    \item removing duplicates.
+    \item Data type conversions.
+\end{itemize}
+
+\subsection{Product Performance Analysis}
+Here wefind the best and worst sellers
+
+\subsection{Sentiment Analysis Methodology}
+Explanation of the sentiment scoring approach (e.g., using VADER, TextBlob, or custom lexicons).
+
+\begin{lstlisting}[language=Python, caption=Sentiment Score Calculation]
+# Example snippet from part1.ipynb
+def get_sentiment(text):
+    # Logic to calculate polarity
+    return score
+\end{lstlisting}
+
+\subsection{Results: Ratings vs. Sentiment}
+Analysis of the correlation between the numerical rating (1-5 stars) and the calculated sentiment score.
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{heatmap_part1.png} 
+    \caption{Heatmap of Review Sentiment vs. Ratings}
+    \label{fig:heatmap}
+\end{figure}
+
+As shown in Figure \ref{fig:heatmap}, we observe a strong correlation in the "hot" zones (high rating, high sentiment), indicating that... [Insert your observation about the south-east/north-west consistency here].
+
+% ===================================================================
+% PART 2
+% ===================================================================
+
+\section{Part 2: Product Analysis, Clustering and Market Basket Mining}
+
+\subsection{Introduction to Part 2}
+Overview of the objectives of Part 2, including product-level text processing, clustering, recommendation logic, and association rule mining.
+
+\subsection{Dataset Preparation and Text Preprocessing}
+Description of the preprocessing pipeline applied to product metadata and review text.
+
+\begin{itemize}
+    \item Text normalization (lowercasing, punctuation removal)
+    \item Expansion of contractions
+    \item Spell correction
+    \item Stopword removal
+    \item Vectorization using TF--IDF
+\end{itemize}
+
+\subsection{Feature Extraction}
+Explanation of how textual features are transformed into numerical representations suitable for machine learning models.
+
+\subsection{Product Clustering}
+
+\subsubsection{Clustering Methodology}
+Description of the clustering approach (e.g., K-Means) and distance metrics.
+
+\subsubsection{Cluster Selection}
+Explanation of the elbow method and justification of the chosen number of clusters.
+
+\subsubsection{Cluster Interpretation}
+Qualitative analysis of resulting clusters and their thematic coherence.
+
+\subsection{Cluster-Based Recommendation Strategy}
+Description of the recommendation logic based on cluster membership and product similarity.
+
+
+\subsection{Association Rule Mining}
+
+
+\subsection{Temporal Pattern Analysis}
+Focused analysis on December transactions to capture seasonal purchasing behavior.  
+
+
+\section{Conclusion}
+Summary of the findings from both parts.
+\begin{itemize}
+    \item \textbf{Part 1 Summary:} Sentiment analysis confirmed that...
+    \item \textbf{Part 2 Summary:} Market basket analysis revealed that...
+\end{itemize}
+
+\end{document}
