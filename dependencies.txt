@@ -1,6 +1,29 @@
-pip install --upgrade ipywidgets spicy
-pip uninstall -y numpy
-pip install "numpy==1.21.6"
+numpy==1.24.3
+scipy==1.15.3
+pandas==2.2.2
 
-pip install Pillow
-pip install --upgrade Pillow
+matplotlib==3.5.1
+seaborn==0.13.2
+pillow==10.4.0
+
+datasets==3.5.1
+pyarrow==20.0.0
+huggingface-hub==0.30.2
+tqdm==4.67.1
+requests==2.32.3
+xxhash==3.5.0
+multiprocess==0.70.16
+fsspec==2025.3.0
+
+vaderSentiment==3.3.2
+kneed==0.8.5
+contractions==0.1.73
+textsearch==0.0.24
+pyspellchecker==0.8.2
+
+scikit-learn==1.6.1
+mlxtend==0.23.4
+joblib==1.4.2
+threadpoolctl==3.5.0
+
+ipywidgets==8.1.7

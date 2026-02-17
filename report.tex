@@ -54,7 +54,7 @@
 \maketitle
 
 \begin{abstract}
-This report presents a comprehensive data mining and analysis study conducted on large-scale Amazon datasets. The project is divided into two complimentary parts. Part 1 mainly focuses on Exploratory Data Analysis (EDA) and Sentiment Analysis to explore user reviews, ratings and the overall structure of the datasets. Part 2 involves text pre-processing, clustering of products to group them into subsets, recommendation system and frequent pattern mining to uncover association rules and purchasing patterns. The work is focused on searching(mining) for useful and interesting information on large scale datasets, the characteristics of which we don't know apriori. The Amazon product categories that were used are the following 5: "Appliances", "All\_Beauty", "Musical\_Instruments", "Software" and "Video\_Games".
+This report presents a comprehensive data mining and analysis study conducted on large-scale Amazon datasets. The project is divided into two complementary parts. Part 1 mainly focuses on Exploratory Data Analysis (EDA) and Sentiment Analysis to explore user reviews, ratings and the overall structure of the datasets. Part 2 involves text pre-processing, clustering of products to group them into subsets, a recommendation system and frequent pattern mining to uncover association rules and purchasing patterns. The work is focused on searching (mining) for useful and interesting information on large scale datasets, the characteristics of which we don't know a priori. The Amazon product categories that were used are the following five. "Appliances", "All\_Beauty", "Musical\_Instruments", "Software" and "Video\_Games".
 \end{abstract}
 
 
@@ -63,16 +63,18 @@ This report presents a comprehensive data mining and analysis study conducted on
 
 \section{Project Structure and Technical Setup}
 
+This project started off as coursework for \href{https://www.di.uoa.gr/studies/undergraduate/courses/ys11}{YS11:Data Mining Techniques} of the Department of Informatics and Telecommunications(DIT, UoA). It was then subsequently refined and expanded after extensive research and further development, to accomplish a more complete and precise study. All of the code is written in Python (v3.10.12) using Jupyter notebooks and is organized into two main parts, corresponding to the two analytical phases of the study. All required dependencies must be installed before running any of the notebooks with the following command at the root of the repository:
+\colorbox{backcolour}{\texttt{pip install -r requirements.txt}}
+After installation, the notebooks can be executed.
+
+
 % ===================================================================
 % PART 1
 % ===================================================================
-
-This project is implemented in Python using Jupyter notebooks and is organized into two main parts, corresponding to the two analytical phases of the study:
-
 \section{Part 1: Sentiment Analysis \& EDA}
 
 \subsection{Introduction to Part 1}
-The objective of this section is to analyze the relationship between user ratings and the textual content of reviews. We utilize Natural Language Processing (NLP) techniques to compute sentiment scores and correlate them with the star ratings.
+The objective of this part is to analyze the overall nature of the datasets, discover average prices, average ratings of the different categories, best and worst selling products and the relationship between user ratings and the textual content of reviews. Natural Language Processing (NLP) techniques are utilized to compute sentiment scores and correlate them with the star ratings.
 
 \subsection{Data Preprocessing}
 Description of the cleaning steps performed in \texttt{part1.ipynb}.
