@@ -26,3 +26,4 @@ timespan: May'96 - Sep'23
 
 TODO:
 να δοκιμάσω χαμηλότερο rating στα worst selling products
+ίδιο format στα best και στα worst selling products
