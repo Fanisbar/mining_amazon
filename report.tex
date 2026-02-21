@@ -63,7 +63,7 @@ This report presents a comprehensive data mining and analysis study conducted on
 
 \section{Project Structure and Technical Setup}
 
-This project started off as coursework for \href{https://www.di.uoa.gr/studies/undergraduate/courses/ys11}{YS11:Data Mining Techniques} of the Department of Informatics and Telecommunications(DIT, UoA). It was then subsequently refined and expanded after extensive research and further development, to accomplish a more complete and precise study. All of the code is written in Python (v3.10.12) using Jupyter notebooks and is organized into two main parts, corresponding to the two analytical phases of the study. All required dependencies must be installed before running any of the notebooks with the following command at the root of the repository:
+This is a project that aims to accomplish an extensive and precise study on large scale Amazon datasets. All of the code is written in Python (v3.10.12) using Jupyter notebooks and is organized into two main parts, corresponding to the two analytical phases of the study. All required dependencies must be installed before running any of the notebooks with the following command at the root of the repository:
 \colorbox{backcolour}{\texttt{pip install -r requirements.txt}}
 After installation, the notebooks can be executed.
 
@@ -78,28 +78,269 @@ Datasets used in this project are from \href{https://huggingface.co/datasets}{Hu
 \subsection{Introduction to Part 1}
 The objective of this part is to analyze the overall nature of the datasets, discover average prices, average ratings of the different categories, best and worst selling products and the relationship between user ratings and the textual content of reviews. Natural Language Processing (NLP) techniques are utilized to compute sentiment scores and correlate them with the star ratings.
 
+\subsection{Exploratory Data Analysis}
+After downloading, the datasets are used to create pandas DataFrames that can be later manipulated as desired. The main goal is to explore the nature of the datasets.
+\begin{itemize}
+    \item At first, the notebook displays the average product price in each category.
+
+    \begin{table}[H]
+        \centering
+        \caption{Average Product Price per Category}
+        \begin{tabular}{lc}
+        \hline
+        \textbf{Category} & \textbf{Average Product Price (USD \$)} \\
+        \hline
+        Appliances & 86.4799 \\
+        Beauty & 27.2557 \\
+        Musical Instruments & 127.7064 \\
+        Software & 2.9567 \\
+        Video Games & 45.7173 \\
+        \hline
+        \end{tabular}
+        \label{tab:avg_price}
+    \end{table}
+    In order to ensure the whole dataset consists of valid data, one step of data pre-processing is performed now, before moving on with the rest of the EDA: handling missing/bad values in the 'price' column. Further details in the Data Preprocessing section.
+    
+    \item A set of plots show the distribution of ratings in each category within the 5-star range. In other words, each plot shows how many 1-star, 2-star, 3-star, 4-star and 5-star ratings are there in each category's dataset. It becomes evident that across all product categories, the 1-star and 5-star ratings exhibit significantly higher frequencies compared to the intermediate ratings (2-4 stars). This pattern can be explained by the fact that customers are more likely to leave a review when they feel either extremely dissatisfied or fully satisfied with a product. In contrast, moderately satisfied users tend to provide feedback less frequently. \\
+    Overall, an increasing trend is observed in the rating distributions, indicating that positive reviews (4 and 5 stars) outnumber negative ones (1 and 2 stars).
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{images/rating_distributions.png}
+        \caption{Distribution of ratings in each category}
+    \end{figure}
+    \item 2 plots per category follow, showcasing the distribution of review lengths both in words and in characters.
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\linewidth]{images/length_distribution/appliances_char.png}
+            \caption{Character Count}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\linewidth]{images/length_distribution/appliances_word.png}
+            \caption{Word Count}
+        \end{subfigure}
+        \caption{Review Length Distribution for Appliances}
+    \end{figure}
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\linewidth]{images/length_distribution/beauty_char.png}
+            \caption{Character Count}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\linewidth]{images/length_distribution/beauty_word.png}
+            \caption{Word Count}
+        \end{subfigure}
+        \caption{Review Length Distribution for Beauty}
+    \end{figure}
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\linewidth]{images/length_distribution/musical_char.png}
+            \caption{Character Count}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\linewidth]{images/length_distribution/musical_word.png}
+            \caption{Word Count}
+        \end{subfigure}
+        \caption{Review Length Distribution for Musical Instruments}
+    \end{figure}
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\linewidth]{images/length_distribution/software_char.png}
+            \caption{Character Count}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\linewidth]{images/length_distribution/software_word.png}
+            \caption{Word Count}
+        \end{subfigure}
+        \caption{Review Length Distribution for Software}
+    \end{figure}
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\linewidth]{images/length_distribution/video_games_char.png}
+            \caption{Character Count}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.49\textwidth}
+            \includegraphics[width=\linewidth]{images/length_distribution/video_games_word.png}
+            \caption{Word Count}
+        \end{subfigure}
+        \caption{Review Length Distribution for Video Games}
+    \end{figure}
+
+    \item Average product rating is displayed for each category.
+    \begin{table}[H]
+        \centering
+        \caption{Average Product Rating per Category}
+        \begin{tabular}{lc}
+        \hline
+        \textbf{Category} & \textbf{Average Product Rating(0-5)} \\
+        \hline
+        Appliances & 4.2215 \\
+        Beauty & 3.9602 \\
+        Musical Instruments & 4.2555 \\
+        Software & 3.9350 \\
+        Video Games & 4.0474 \\
+        \hline
+        \end{tabular}
+        \label{tab:avg_rating}
+    \end{table}
+\end{itemize}
+
 \subsection{Data Preprocessing}
 \begin{itemize}
-    \item After downloading, the datasets are used to create pandas DataFrames that can be later manipulated as desired.
     \item All missing price values are replaced with the mean price value.
     \item All bad values or NULL values are replaced with the mean price value.
     \item All html elements are removed from the text column of the reviews(e.g. \&amp).
 \end{itemize}
 After experimentation, it was found that no other pre-processing was necessary for this part.
 
-\subsection{Exploratory Data Analysis}
-Briefly explore the nature of the datasets. The notebook displays the average product price in each category. This happens in between cells of code that aim to replace all bad values in the 'price' column of a category, with that mean price value. A set of plots then show the distribution of ratings in each category within the 5-star range. In simple words, it shows how many 1-star ratings, how many 2-star ratings, how many 3-star ratings etc. there are in each category. Next, 2 plots per category follow, showcasing the distribution of review lengths both in words and in characters. Explain what information we obtain from those plots
-
 \subsection{Product Performance Analysis}
-Here we find the best and worst sellers
+In this section, an attempt is made to find the best selling products and the worst sellers. To be more specific, Best sellers are the products with high review count and high ratings, whereas worst selling products are those with a high review count but quite low rating.
+Starting off with the worst sellers, the 10 'worst' products are presented for each category, along with a WordCloud plot per category, to display commonly used vocabulary in the reviews of such products.
+\begin{itemize}
+    \item Appliances:
+        \begin{enumerate}
+            \item B01CBWDY0C: Nespresso Capsules Refillable - Reusable Coffee Pods For Nespresso Cups - OriginalLine Compatible - Pack of 6 (reviews: 938, avg rating: 3.00)
+            \item B081K5T5HB: Deflecto Magnetic Vent Cover, For Sidewall and Floor Vents, 5" x 12", 3 Pack (MVCX512),White (reviews: 896, avg rating: 2.51)
+            \item B0000CF4DJ: Harold Coffee Tools Filter Separator (reviews: 749, avg rating: 2.87)
+            \item B08WH5XL86: RCA RFRF450-AMZ, 5.1 Cubic Foot Chest, Deep Freezer Cold Storage for Food, White (reviews: 691, avg rating: 2.77)
+            \item B09JY77GCY: GE Profile Opal | Countertop Nugget Ice Maker with Side Tank | Portable Ice Machine Makes up to 24 lbs. of Ice Per Day | Stainless Steel Finish (reviews: 675, avg rating: 2.85)
+            \item B09B18P5RG: GE Profile Opal | Countertop Nugget Ice Maker | Portable Ice Machine Complete with Bluetooth Connectivity | Smart Home Kitchen Essentials | Stainless Steel Finish | Up to 24 lbs. of Ice Per Day (reviews: 501, avg rating: 2.78)
+            \item B00GN92KQ4: Quirky Egg Minder Wink App Enabled Smart Egg Tray, PEGGM-WH01 (reviews: 500, avg rating: 2.59)
+            \item B07QPBTR4B: AquaPlumb RKG Gas Range Knob- 5PC/Card (reviews: 403, avg rating: 2.35)
+            \item B07S61G1RQ: Jetec 4 Pack Black Control Knobs Replacement with 12 Adapters for Oven/Stove/Range (reviews: 395, avg rating: 2.81)
+            \item B08MMJ8RM7: RCA RFRF454-BLACK 5.1 Cubic Feet Chest Freezer, 5 cu ft, Black (reviews: 379, avg rating: 2.93)
+        \end{enumerate}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{images/wordclouds/wc_appliances.png}
+        \end{figure}
+    \item Beauty:
+        \begin{enumerate}
+            \item B01195J43I: DASKY 29W Digital Anti Static Ceramic Hair Straightener Heating Detangling Hair Brush Paddle Brush For Faster Straightening Styling Massage Straightening Iron (Pink) (reviews: 502, avg rating: 2.84)
+            \item B082RD77G5: Purple Shampoo and Conditioner Set - Sulfate Free Salon Grade (2 x 16.9 fl oz) - Hydrating Toner - Shimmer Correction for Platinum Blonde, Silver, Light, and Grey Hair (reviews: 478, avg rating: 2.91)
+            \item B071XQ355Y: Tooletries – Oliver Shower Mirror - Premium Shower Mirror for Shaving, Grooming - 100% silicone - SHATTERPROOF Mirror - Grips to Shiny Surfaces - No Suction Cups - No Adhesives – Charcoal (reviews: 448, avg rating: 2.91)
+            \item B01CTQC9J2: CITY 1 PC White Peel Off Liquid Tape Peel Off Base Coat Nail Art Liquid Palisade (reviews: 338, avg rating: 2.78)
+            \item B07WDJB6BH: Allnice Magnetic Eyelashes Dual Magnets False Eyelashes Reusable 3D No Glue 3 Fake Lashes Extension with Tweezers for Women Makeup Natural Look 8 Pieces / 2 Pairs (reviews: 317, avg rating: 1.53)
+            \item B08WJPNZPQ: Lume Natural Deodorant - Underarms and Private Parts - Aluminum-Free, Baking Soda-Free, Hypoallergenic, and Safe For Sensitive Skin - 2.2 Ounce Stick (Twisted Lime) (reviews: 313, avg rating: 2.81)
+            \item B07PFH92HN: Gel Nail Polish Starter Kit with 36W Nail Light,LED Nail Dryer Lamp 12 Color Gel and Base Top Coat Essentials Manicure Tools (reviews: 232, avg rating: 2.84)
+            \item B0811S3MZ2: MUSELASH 5 Pairs Upgraded Magnetic Eyelashes Magnetic Eyeliner and Eyelashes Kit,Reusable 3D Magnetic Eyelashes and Strong Magnetic Lashes Set,5 Styles Soft Eyelashes with Professional Tweezers (reviews: 228, avg rating: 2.86)
+            \item B008C2QYPI: Beauty Town Luxury Wide Band Satin Bonnet Cap (Pink) (reviews: 224, avg rating: 2.95)
+            \item B00011JN5G: American International Industries Clean + Easy Deluxe Electrolysis Home for Coarse Hair (reviews: 216, avg rating: 2.82)
+        \end{enumerate}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{images/wordclouds/wc_beauty.png}
+        \end{figure}
+    \item Musical Instruments:
+        \begin{enumerate}
+            \item B0007L8BQW: PYLE-PRO Wireless Clip Lavalier Microphone System Portable Professional Clip Lav lapel Mic set with Volume Control, 20 ft range - Transmitter, Receiver, Battery For Camera, Sound Recorder ProPDWM96 (reviews: 1253, avg rating: 2.72)
+            \item B09HZMX75B: Uniwit Mini Portable Vocal/Instrument Microphone for Mobile Phone Laptop Notebook Apple iPhone Sumsung Android with Holder Clip (Golden) (reviews: 1193, avg rating: 2.62)
+            \item B0006DONOK: Emerson EAM-9002 Dual Handheld Wireless Microphone Starter Kit with Wireless FM Receiver, Black (reviews: 391, avg rating: 2.82)
+            \item B00282WZG0: Grover Jaw Harp (8037) (reviews: 357, avg rating: 2.48)
+            \item B00H7Y2ZKK: On Stage MN5A Nylon Tip Maple Drum Sticks (Pack of 12) (reviews: 311, avg rating: 2.94)
+            \item B002UR3JVI: Hello Kitty / Emoji Karaoke Microphone - Style May Vary (reviews: 308, avg rating: 2.55)
+            \item B01G2DLWZU: Ez-Fret Guitar Attachment, Eliminates Finger Pain, 110 Chords Available, Fits MOST Full Sized Acoustic Guitar, L/H OK, Not A Beginner Tool, For People Whose Fingers Hurt From Guitar Strings (reviews: 299, avg rating: 2.96)
+            \item B0992FLF8B: 12 Pack Acoustic Panels 1 X 12 X 12 Inches – Acoustic Foam - Studio Foam Wedges - High Density Panels – Soundproof Wedges - Charcoal (reviews: 281, avg rating: 2.95)
+            \item B06XFYX3NH: Luvay Pocket Guitar, Finger Exercise, Scales \& Chords Practice Tool (6 Fret Black) (reviews: 253, avg rating: 2.99)
+            \item B00CGYETBO: Star MG50-PL Kids Acoustic Toy Guitar 23-Inch, Purple (reviews: 226, avg rating: 2.49)
+        \end{enumerate}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{images/wordclouds/wc_musical_instruments.png}
+        \end{figure}
+    \item Software:
+        \begin{enumerate}
+            \item B017250D16: Paramount+ (reviews: 26026, avg rating: 2.68)
+            \item B00BYJ6BUO: ABC: Watch Live TV \& Sports (reviews: 9125, avg rating: 2.93)
+            \item B01923M8T6: NBC Sports (reviews: 7884, avg rating: 2.77)
+            \item B01LXOU5PM: NFL (reviews: 6499, avg rating: 2.89)
+            \item B00E81O27Y: ESPN for Fire TV (reviews: 6185, avg rating: 2.97)
+            \item B019DCHDZK: fuboTV: Watch Live Sports, TV Shows, Movies \& News (reviews: 5437, avg rating: 2.88)
+            \item B00KY7PEAA: Game of War - Fire Age (reviews: 5433, avg rating: 2.98)
+            \item B00GY1DWUO: Spectrum TV (reviews: 5306, avg rating: 2.96)
+            \item B019CVAKMK: Paramount Network (reviews: 4687, avg rating: 2.86)
+            \item B00BI60DMU: Watch TBS (reviews: 3987, avg rating: 3.00)
+        \end{enumerate}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{images/wordclouds/wc_software.png}
+        \end{figure}
+    \item Video Games:
+        \begin{enumerate}
+            \item B007W5PG5U: SimCity: Limited Edition (reviews: 3765, avg rating: 1.48)
+            \item B07YBX7Y3P: Fallout 76 - Xbox One Tricentennial Edition (reviews: 3317, avg rating: 2.54)
+            \item B001FRTK4O: Spore - PC/Mac (reviews: 2400, avg rating: 1.82)
+            \item B07DK1H3H5: Cyberpunk 2077 - PC [Game Download Code in Box] (reviews: 2277, avg rating: 2.63)
+            \item B007VTVRFA: SimCity - Standard Edition [Download] (reviews: 2236, avg rating: 1.76)
+            \item B00ZQB28XK: No Man's Sky - PlayStation 4 (reviews: 1876, avg rating: 2.81)
+            \item B0B36T478W: ASTRO Gaming A50 Wireless Headset + Base Station Gen 4 - Compatible With PS5, PS4, PC, Mac - Black/Silver (reviews: 1739, avg rating: 2.96)
+            \item B0BFFJTZNN: SteelSeries Arctis 9X Wireless Gaming Headset – Integrated Xbox Wireless + Bluetooth – 20+ Hour Battery Life – for Xbox One and Series X (reviews: 1731, avg rating: 2.75)
+            \item B09BXPRNY9: Turtle Beach Recon Chat Xbox Headset for Xbox Series X, Xbox Series S, Xbox One, PS5, PS4, PlayStation, Nintendo Switch, Mobile, \& PC with 3.5mm – Glasses Friendly, High-Sensitivity Mic - Black (reviews: 1501, avg rating: 2.83)
+            \item B003Z0BRDQ: Sid Meier's Civilization V [Download] (reviews: 1490, avg rating: 2.84)
+        \end{enumerate}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{images/wordclouds/wc_video_games.png}
+        \end{figure}
+\end{itemize}
+Next are the best sellers of each category, such products have a high review count and a high average rating score. The top five best selling products are presented every time.
+\begin{itemize}
+    \item Appliances:
+        \begin{enumerate}
+            \item 12 Pack Keurig Filter Replacement by K\&J - Compatible with Keurig Coffee Machine (2.0 and older) (ASIN: B0B3DB5HTC | Verified Reviews: 11865)
+            \item iPartPlusMore Reusable Coffee Filters Compatible with 1.0 and 2.0 Keurig Single Cup Coffee Maker - BPA-Free Stainless Steel Refillable K Cup Coffee Filter with Fine Mesh Screen (Pack of 4) (ASIN: B07RNJY499 | Verified Reviews: 11416)
+            \item Linda's Essentials Silicone Stove Gap Covers (2 Pack), Heat Resistant Oven Gap Filler Seals Gaps Between Stovetop and Counter, Easy to Clean (25 Inches, White) (ASIN: B07WTXWC32 | Verified Reviews: 8412)
+            \item SAMSUNG Genuine Filters for Refrigerator Water and Ice, Carbon Block Filtration for Clean, Clear Drinking Water, DA29-00020B-3P, 3 Pack (ASIN: B08YBGCNHP | Verified Reviews: 7195)
+            \item GE MWF Refrigerator Water Filter | Certified to Reduce Lead, Sulfur, and 50+ Other Impurities | Replace Every 6 Months for Best Results | Pack of 1 (ASIN: B000AST3AK | Verified Reviews: 6854)
+        \end{enumerate}    
+    \item Beauty:
+        \begin{enumerate}
+            \item Salux Nylon Japanese Beauty Skin Bath Wash Cloth/towel (3) Blue Yellow and Pink (ASIN: B085BB7B1M | Verified Reviews: 1887)
+            \item Godefroy Tint Kit for Spot Coloring, Dark Brown (ASIN: B0BM4GX6TT | Verified Reviews: 1719)
+            \item Segbeauty empty bottle 160083 (ASIN: B07C533XCW | Verified Reviews: 1495)
+            \item Makone Crystal Crowns and Tiaras with Comb Headband for Girl or Women Birthday Party Wedding Prom Bridal Christmas Valentine… (03 Pink) (ASIN: B09X9BG4FC | Verified Reviews: 1317)
+            \item Collapsible Hair Diffuser by The Curly Co. with The Curly Co. Satisfaction Guarantee (ASIN: B019GBG0IE | Verified Reviews: 1302)
+        \end{enumerate}
+    \item Musical Instruments:
+        \begin{enumerate}
+            \item GLS Audio Instrument Cable - Amp Cord for Bass \& Electric Guitar - Straight to Right Angle 1/4 Inch Instrument Cable - Black/Grey Braided Tweed, 10ft (ASIN: B09857JRP2 | Verified Reviews: 9107)
+            \item BONAOK Wireless Bluetooth Karaoke Microphone, 3-in-1 Portable Handheld Mic Speaker Machine for All Smartphones, Gifts to Girls Boys Kids Adults All Age Q37(Black Gold) (ASIN: B09W4F2X6S | Verified Reviews: 7030)
+            \item Blue Yeti USB Microphone for PC, Mac, Gaming, Recording, Streaming, Podcasting, Studio and Computer Condenser Mic with Blue VO!CE effects, 4 Pickup Patterns, Plug and Play – Blackout (ASIN: B0C6H9T5T6 | Verified Reviews: 6634)
+            \item Donner Guitar Delay Pedal, Yellow Fall Analog Delay Guitar Effect Pedal Vintage Delay True Bypass (ASIN: B0BCK6L7S5 | Verified Reviews: 6401)
+            \item Neewer Microphone Arm Stand, Suspension Boom Scissor Mic Arm Stand with 3/8” to 5/8” Screw and Cable Ties Compatible with Blue Yeti, Snowball, Yeti X, Quadcast and Other Mics, Max Load 1.5kg (ASIN: B00DY1F2CS | Verified Reviews: 4790)
+        \end{enumerate}
+    \item Software:
+        \begin{enumerate}
+            \item Candy Crush Saga (ASIN: B00FAPF5U0 | Verified Reviews: 50276)
+            \item Amazon Prime Video (ASIN: B00N28818A | Verified Reviews: 45388)
+            \item Minecraft (ASIN: B00992CF6W | Verified Reviews: 42210)
+            \item Netflix (ASIN: B005ZXWMUS | Verified Reviews: 32262)
+            \item Facebook (ASIN: B0094BB4TW | Verified Reviews: 29836)
+        \end{enumerate}
+    \item Video Games:
+        \begin{enumerate}
+            \item amFilm Tempered Glass Screen Protector for Nintendo Switch 2017 (2-Pack) (ASIN: B01N3ASPNV | Verified Reviews: 17833)
+            \item BENGOO Stereo Pro Gaming Headset for PS4, PC, Xbox One Controller, Noise Cancelling Over Ear Headphones with Mic, LED Light, Bass Surround, Soft Memory Earmuffs for Laptop Mac Wii Accessory Kits (ASIN: B0BN942894 | Verified Reviews: 16403)
+            \item DualShock 4 Wireless Controller for PlayStation 4 - Jet Black (ASIN: B077GG9D5D | Verified Reviews: 15195)
+            \item Xbox Live Gold: 1 Month Membership [Digital Code] (ASIN: B000N5Z2L4 | Verified Reviews: 12805)
+            \item Grand Theft Auto V: Premium Edition - Xbox One [Digital Code] (ASIN: B0086VPUHI | Verified Reviews: 10856)
+        \end{enumerate}
+\end{itemize}
 
 \subsection{Sentiment Analysis Methodology}
 Explanation of the sentiment scoring approach (e.g., using VADER, TextBlob, or custom lexicons).
 
 \begin{lstlisting}[language=Python, caption=Sentiment Score Calculation]
-# Example snippet from part1.ipynb
 def get_sentiment(text):
-    # Logic to calculate polarity
     return score
 \end{lstlisting}
 
