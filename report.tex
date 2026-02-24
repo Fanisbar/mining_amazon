@@ -54,7 +54,7 @@
 \maketitle
 
 \begin{abstract}
-This report presents a comprehensive data mining and analysis study conducted on large-scale Amazon datasets. The project is divided into two complementary parts. Part 1 mainly focuses on Exploratory Data Analysis (EDA) and Sentiment Analysis to explore user reviews, ratings and the overall structure of the datasets. Part 2 involves text pre-processing, clustering of products to group them into subsets, a recommendation system and frequent pattern mining to uncover association rules and purchasing patterns. The work is focused on searching (mining) for useful and interesting information on large scale datasets, the characteristics of which we don't know a priori. The Amazon product categories that were used are the following five. "Appliances", "All\_Beauty", "Musical\_Instruments", "Software" and "Video\_Games".
+This report presents a comprehensive data mining and analysis study conducted on large-scale Amazon datasets. The project is divided into two complementary parts. Part 1 mainly focuses on Exploratory Data Analysis (EDA) and Sentiment Analysis to explore user reviews, ratings and the overall structure of the datasets. Part 2 involves text pre-processing, clustering of products to group them into subsets, a recommendation system and frequent pattern mining to uncover association rules and purchasing patterns. The work is focused on searching (mining) for useful and interesting information on large-scale datasets, the characteristics of which we don't know a priori. The Amazon product categories that were used are the following five. Appliances, All\_Beauty, Musical\_Instruments, Software and Video\_Games.
 \end{abstract}
 
 
@@ -63,12 +63,12 @@ This report presents a comprehensive data mining and analysis study conducted on
 
 \section{Project Structure and Technical Setup}
 
-This is a project that aims to accomplish an extensive and precise study on large scale Amazon datasets. All of the code is written in Python (v3.10.12) using Jupyter notebooks and is organized into two main parts, corresponding to the two analytical phases of the study. All required dependencies must be installed before running any of the notebooks with the following command at the root of the repository:
+This is a project that aims to accomplish an extensive and precise study on large-scale Amazon datasets. All of the code is written in Python (v3.10.12) using Jupyter notebooks and is organized into two main parts, corresponding to the two analytical phases of the study. All required dependencies must be installed before running any of the notebooks with the following command at the root of the repository:
 \colorbox{backcolour}{\texttt{pip install -r requirements.txt}}
 After installation, the notebooks can be executed.
 
 \section{Datasets}
-Datasets used in this project are from \href{https://huggingface.co/datasets}{Hugging Face} and concern Amazon products, including reviews and metadata collected in 2023 by McAuley Lab. Both parts use the same 10 csv files: two datasets, reviews and metadata, for each product category. The first few code cells in both notebooks download the datasets locally. One could use the max\_rows variable to limit the datasets to an arbitrary number of rows, to save time and system resources. Full-size datasets are quite large and take up approximately 6.4GB of space.
+Datasets used in this project are from \href{https://huggingface.co/datasets}{Hugging Face} and concern Amazon products, including reviews and metadata collected in 2023 by McAuley Lab. Both parts use the same 10 CSV files: two datasets, reviews and metadata, for each product category. The first few code cells in both notebooks download the datasets locally. One could use the texttt{max\_rows} variable to limit the datasets to an arbitrary number of rows, to save time and system resources. Full-size datasets are quite large and take up approximately 6.4GB of space.
 
 % ===================================================================
 % PART 1
@@ -79,7 +79,7 @@ Datasets used in this project are from \href{https://huggingface.co/datasets}{Hu
 The objective of this part is to analyze the overall nature of the datasets, discover average prices, average ratings of the different categories, best and worst selling products and the relationship between user ratings and the textual content of reviews. Natural Language Processing (NLP) techniques are utilized to compute sentiment scores and correlate them with the star ratings.
 
 \subsection{Exploratory Data Analysis}
-After downloading, the datasets are used to create pandas DataFrames that can be later manipulated as desired. The main goal is to explore the nature of the datasets.
+After downloading, the datasets are used to create pandas DataFrames that can later be manipulated as desired. The main goal is to explore the nature of the datasets.
 \begin{itemize}
     \item At first, the notebook displays the average product price in each category.
 
@@ -99,14 +99,14 @@ After downloading, the datasets are used to create pandas DataFrames that can be
         \end{tabular}
         \label{tab:avg_price}
     \end{table}
-    In order to ensure the whole dataset consists of valid data, one step of data pre-processing is performed now, before moving on with the rest of the EDA: handling missing/bad values in the 'price' column. Further details in the Data Preprocessing section.
+    In order to ensure that the whole dataset consists of valid data, one step of data pre-processing is performed now, before moving on with the rest of the EDA: handling missing/bad values in the 'price' column. Further details are provided in the Data Pre-Processing section.
     
-    \item A set of plots show the distribution of ratings in each category within the 5-star range. In other words, each plot shows how many 1-star, 2-star, 3-star, 4-star and 5-star ratings are there in each category's dataset. It becomes evident that across all product categories, the 1-star and 5-star ratings exhibit significantly higher frequencies compared to the intermediate ratings (2-4 stars). This pattern can be explained by the fact that customers are more likely to leave a review when they feel either extremely dissatisfied or fully satisfied with a product. In contrast, moderately satisfied users tend to provide feedback less frequently. \\
+    \item A set of plots show the distribution of ratings in each category within the 5-star range. In other words, each plot shows how many 1-star, 2-star, 3-star, 4-star and 5-star ratings are there in each category's dataset. It becomes evident that across all product categories, the 1-star and 5-star ratings exhibit significantly higher frequencies compared to the intermediate ratings (2--4 stars). This pattern can be explained by the fact that customers are more likely to leave a review when they feel either extremely dissatisfied or fully satisfied with a product. In contrast, moderately satisfied users tend to provide feedback less frequently. \\
     Overall, an increasing trend is observed in the rating distributions, indicating that positive reviews (4 and 5 stars) outnumber negative ones (1 and 2 stars).
     \begin{figure}[H]
         \centering
         \includegraphics[width=\textwidth]{images/rating_distributions.png}
-        \caption{Distribution of ratings in each category}
+        \caption{Distribution of Ratings in Each Category}
     \end{figure}
     \item 2 plots per category follow, showcasing the distribution of review lengths both in words and in characters.
     \begin{figure}[H]
@@ -181,7 +181,7 @@ After downloading, the datasets are used to create pandas DataFrames that can be
         \caption{Average Product Rating per Category}
         \begin{tabular}{lc}
         \hline
-        \textbf{Category} & \textbf{Average Product Rating(0-5)} \\
+        \textbf{Category} & \textbf{Average Product Rating(0--5)} \\
         \hline
         Appliances & 4.2215 \\
         Beauty & 3.9602 \\
@@ -194,17 +194,17 @@ After downloading, the datasets are used to create pandas DataFrames that can be
     \end{table}
 \end{itemize}
 
-\subsection{Data Preprocessing}
+\subsection{Data Pre-Processing}
 \begin{itemize}
     \item All missing price values are replaced with the mean price value.
     \item All bad values or NULL values are replaced with the mean price value.
-    \item All html elements are removed from the text column of the reviews(e.g. \&amp).
+    \item All HTML elements are removed from the text column of the reviewsreviews(e.g., \&amp).
 \end{itemize}
 After experimentation, it was found that no other pre-processing was necessary for this part.
 
 \subsection{Product Performance Analysis}
-In this section, an attempt is made to find the best selling products and the worst sellers. To be more specific, Best sellers are the products with high review count and high ratings, whereas worst selling products are those with a high review count but quite low rating.
-Starting off with the worst sellers, the 10 'worst' products are presented for each category, along with a WordCloud plot per category, to display commonly used vocabulary in the reviews of such products.
+In this section, an attempt is made to find the best selling products and the worst sellers. To be more specific, Best sellers are products with high review count and high ratings, whereas worst-selling products are those with a high review count but quite low rating.
+Starting off with the worst sellers, the 10 worst products are presented for each category, along with a word cloud plot per category, to display commonly used vocabulary in the reviews of such products.
 \begin{itemize}
     \item Appliances:
         \begin{enumerate}
@@ -292,7 +292,7 @@ Starting off with the worst sellers, the 10 'worst' products are presented for e
             \includegraphics[width=\textwidth]{images/wordclouds/wc_video_games.png}
         \end{figure}
 \end{itemize}
-Next are the best sellers of each category, such products have a high review count and a high average rating score. The top five best selling products are presented every time.
+Next are the best sellers of each category. Such products have a high review count and a high average rating score. The top five best selling products are presented in each case.
 \begin{itemize}
     \item Appliances:
         \begin{enumerate}
@@ -336,8 +336,32 @@ Next are the best sellers of each category, such products have a high review cou
         \end{enumerate}
 \end{itemize}
 
+Lastly, the progress of the average product rating throughout the years is shown for each category.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/avg_rating_distr/avg_rating_appliances.png}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/avg_rating_distr/avg_rating_beauty.png}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/avg_rating_distr/avg_rating_musical.png}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/avg_rating_distr/avg_rating_software.png}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/avg_rating_distr/avg_rating_video_games.png}
+\end{figure}
+It is evident that there were far too few reviews before 2012 for almost all the categories, as there is an acute fluctuation of the average rating (which is expected, since not many people were using the Internet on a daily basis). However, in almost all categories, there is a point after which the average rating stabilizes around a certain value. This is the common pattern after some years of strong fluctuation due to the smaller number of reviews in the early years.
+
+
 \subsection{Sentiment Analysis Methodology}
-Explanation of the sentiment scoring approach (e.g., using VADER, TextBlob, or custom lexicons).
+In this section, an attempt is made to capture the sentiment of all reviews, in order to ultimately compare the textual reviews of products to their respective ratings.
 
 \begin{lstlisting}[language=Python, caption=Sentiment Score Calculation]
 def get_sentiment(text):
@@ -365,8 +389,8 @@ As shown in Figure \ref{fig:heatmap}, we observe a strong correlation in the "ho
 \subsection{Introduction to Part 2}
 Overview of the objectives of Part 2, including product-level text processing, clustering, recommendation logic, and association rule mining.
 
-\subsection{Dataset Preparation and Text Preprocessing}
-Description of the preprocessing pipeline applied to product metadata and review text.
+\subsection{Dataset Preparation and Text Pre-Processing}
+Description of the pre-processing pipeline applied to product metadata and review text.
 
 \begin{itemize}
     \item Text normalization (lowercasing, punctuation removal)
