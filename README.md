@@ -25,5 +25,4 @@ timespan: May'96 - Sep'23
 και έτσι να χάσουμε ένα ζεύγος αν εκτυπώνουμε εναλλάξ
 
 TODO:
-να δοκιμάσω χαμηλότερο rating στα worst selling products
 ίδιο format στα best και στα worst selling products
