@@ -456,16 +456,31 @@ def compute_vader_sentiment(text):
 By applying the string slice \texttt{[:1000]}, only the first 1000 characters of each review are processed to extract the sentiment. This choice conserved significant computational resources and time, as the datasets contained some extremely long reviews. Furthermore, since VADER's algorithm relies on lexicon and rule-based heuristics, evaluating the first 150 to 200 words (roughly 1000 characters) is generally more than sufficient to accurately capture the overall polarity of a text.
 
 \subsection{Results: Ratings vs. Sentiment}
-Analysis of the correlation between the numerical rating (1-5 stars) and the calculated sentiment score.
+This section focuses on analyzing the correlation between the numerical rating (1 to 5 stars) and the calculated sentiment score of the textual reviews across all product categories. These relationships are visualized below using heatmaps, where warmer colors (e.g., red) indicate a higher concentration of reviews, and cooler colors (e.g., blue) represent lower frequencies.
 
 \begin{figure}[H]
     \centering
-    % \includegraphics[width=0.8\textwidth]{heatmap_part1.png} 
-    \caption{Heatmap of Review Sentiment vs. Ratings}
-    \label{fig:heatmap}
+    \includegraphics[width=\textwidth]{images/heatmaps/heatmap_appliances.png} 
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/heatmaps/heatmap_beauty.png} 
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/heatmaps/heatmap_musical.png} 
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/heatmaps/heatmap_software.png} 
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/heatmaps/heatmap_games.png} 
 \end{figure}
 
-As shown in Figure \ref{fig:heatmap}, we observe a strong correlation in the "hot" zones (high rating, high sentiment), indicating that... [Insert your observation about the south-east/north-west consistency here].
+
+As illustrated in the heatmaps, there is a strong positive correlation between the extracted sentiment scores and the numerical ratings. High-density "hot" zones corresponding to high ratings paired with high sentiment, and low ratings paired with low sentiment capture the vast majority of the reviews. Conversely, low-density ``cold'' zones represent the rare instances where a user's numerical rating does not align with the textual sentiment of their review. Across all categories, the heatmaps consistently exhibit warmer colors along the expected diagonal (top-right and bottom-left quadrants) and cooler colors in the off-diagonal areas (top-left and bottom-right). This distribution strictly aligns with our initial expectations, notwithstanding a few natural outliers.
 
 % ===================================================================
 % PART 2
