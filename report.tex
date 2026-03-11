@@ -54,7 +54,7 @@
 \maketitle
 
 \begin{abstract}
-This report presents a comprehensive data mining and analysis study conducted on large-scale Amazon datasets. The project is divided into two complementary parts. Part 1 mainly focuses on Exploratory Data Analysis (EDA) and Sentiment Analysis to explore user reviews, ratings and the overall structure of the datasets. Part 2 involves text pre-processing, clustering of products to group them into subsets, a recommendation system and frequent pattern mining to uncover association rules and purchasing patterns. The work is focused on searching (mining) for useful and interesting information on large-scale datasets, the characteristics of which we don't know a priori. The Amazon product categories that were used are the following five. Appliances, All\_Beauty, Musical\_Instruments, Software and Video\_Games.
+This report presents a comprehensive data mining and analysis study conducted on large-scale Amazon datasets. The project is divided into two complementary parts. Part 1 mainly focuses on Exploratory Data Analysis (EDA) and Sentiment Analysis to explore user reviews, ratings and the overall structure of the datasets. Part 2 involves text pre-processing, clustering of products to group them into subsets, a recommendation system and frequent pattern mining to uncover association rules and purchasing patterns. The work is focused on searching (mining) for useful and interesting information on large-scale datasets, the characteristics of which we do not know a priori. The Amazon product categories that were used are the following five: Appliances, All\_Beauty, Musical\_Instruments, Software and Video\_Games.
 \end{abstract}
 
 
@@ -68,7 +68,7 @@ This is a project that aims to accomplish an extensive and precise study on larg
 After installation, the notebooks can be executed.
 
 \section{Datasets}
-Datasets used in this project are from \href{https://huggingface.co/datasets}{Hugging Face} and concern Amazon products, including reviews and metadata collected in 2023 by McAuley Lab. Both parts use the same 10 CSV files: two datasets, reviews and metadata, for each product category. The first few code cells in both notebooks download the datasets locally. One could use the texttt{max\_rows} variable to limit the datasets to an arbitrary number of rows, to save time and system resources. Full-size datasets are quite large and take up approximately 6.4GB of space.
+Datasets used in this project are from \href{https://huggingface.co/datasets}{Hugging Face} and concern Amazon products, including reviews and metadata collected in 2023 by McAuley Lab. Both parts use the same 10 CSV files: two datasets, reviews and metadata, for each product category. The first few code cells in both notebooks download the datasets locally. One could use the \texttt{max\_rows} variable to limit the datasets to an arbitrary number of rows, to save time and system resources. Full-size datasets are quite large and take up approximately 6.4GB of space.
 
 % ===================================================================
 % PART 1
@@ -101,8 +101,8 @@ After downloading, the datasets are used to create pandas DataFrames that can la
     \end{table}
     In order to ensure that the whole dataset consists of valid data, one step of data pre-processing is performed now, before moving on with the rest of the EDA: handling missing/bad values in the 'price' column. Further details are provided in the Data Pre-Processing section.
     
-    \item A set of plots show the distribution of ratings in each category within the 5-star range. In other words, each plot shows how many 1-star, 2-star, 3-star, 4-star and 5-star ratings are there in each category's dataset. It becomes evident that across all product categories, the 1-star and 5-star ratings exhibit significantly higher frequencies compared to the intermediate ratings (2--4 stars). This pattern can be explained by the fact that customers are more likely to leave a review when they feel either extremely dissatisfied or fully satisfied with a product. In contrast, moderately satisfied users tend to provide feedback less frequently. \\
-    Overall, an increasing trend is observed in the rating distributions, indicating that positive reviews (4 and 5 stars) outnumber negative ones (1 and 2 stars).
+    \item \item A set of plots shows the distribution of ratings in each category within the 5-star range. In other words, each plot illustrates the frequency of 1-star to 5-star ratings within each category's dataset. It becomes evident that across all product categories, the 1-star and 5-star ratings exhibit significantly higher frequencies compared to the intermediate ratings (2--4 stars). This pattern can be explained by the fact that customers are more likely to leave a review when they feel either extremely dissatisfied or fully satisfied with a product. In contrast, moderately satisfied users tend to provide feedback less frequently. \\
+    Overall, an upward trend is observed in the rating distributions, indicating that positive reviews (4 and 5 stars) significantly outnumber negative ones (1 and 2 stars).
     \begin{figure}[H]
         \centering
         \includegraphics[width=\textwidth]{images/rating_distributions.png}
@@ -198,12 +198,23 @@ After downloading, the datasets are used to create pandas DataFrames that can la
 \begin{itemize}
     \item All missing price values are replaced with the mean price value.
     \item All bad values or NULL values are replaced with the mean price value.
-    \item All HTML elements are removed from the text column of the reviewsreviews(e.g., \&amp).
+    \item All HTML elements are removed from the text column of the reviews(e.g., \texttt{\&amp;}).
 \end{itemize}
 After experimentation, it was found that no other pre-processing was necessary for this part.
+An important design choice during data cleaning was the robust handling of missing or corrupted price values:
+
+\begin{lstlisting}[language=Python]
+def replace_invalid_prices(df, mean):
+    df['price'] = pd.to_numeric(df['price'], errors='coerce') 
+    df.loc[(df['price'].isna()) | (df['price'] <= 0.0), 'price'] = mean
+    return df
+\end{lstlisting}
+
+By utilizing the \texttt{errors='coerce'} parameter, any corrupted string values are safely converted to \texttt{NaN}. Furthermore, the condition \texttt{df['price'] <= 0.0} ensures that free or negatively priced items---which are typically scraping artifacts or errors in this context---are also treated as missing. Replacing these invalid entries with the category's mean (mean imputation) preserves the dataset's volume for subsequent text analysis without skewing the expected price distribution.
 
 \subsection{Product Performance Analysis}
-In this section, an attempt is made to find the best selling products and the worst sellers. To be more specific, Best sellers are products with high review count and high ratings, whereas worst-selling products are those with a high review count but quite low rating.
+In this section, an attempt is made to find the best selling products and the worst sellers. To be more specific, best sellers are products with high review count and high ratings, whereas worst-selling products are those with a high review count but quite low rating.
+
 Starting off with the worst sellers, the 10 worst products are presented for each category, along with a word cloud plot per category, to display commonly used vocabulary in the reviews of such products.
 \begin{itemize}
     \item Appliances:
@@ -292,7 +303,25 @@ Starting off with the worst sellers, the 10 worst products are presented for eac
             \includegraphics[width=\textwidth]{images/wordclouds/wc_video_games.png}
         \end{figure}
 \end{itemize}
-Next are the best sellers of each category. Such products have a high review count and a high average rating score. The top five best selling products are presented in each case.
+
+Next are the best sellers of each category. Such products have a high review count and a high average rating score.
+To accurately identify the ``best-selling'' products, a naive sorting by average rating or review count is insufficient. Sorting solely by rating often surfaces obscure products with a single 5-star review, while sorting solely by review count highlights popular but potentially mediocre items. To solve this, a multi-stage ranking heuristic was implemented:
+
+\begin{lstlisting}[language=Python]
+# Keep only products with high rating
+merged_df = merged_df[merged_df['avg_rating'] >= 4]
+
+# Sort by verified review count descending and take top_n * 2
+top_products = merged_df.sort_values(by='verified_review_count', ascending=False).head(top_n * 2)
+
+# From those highly reviewed products, sort by avg_rating 
+top_products = top_products.sort_values(by='avg_rating', ascending=False).head(top_n)
+\end{lstlisting}
+
+This approach guarantees statistical significance by first isolating a larger pool (\texttt{top\_n * 2}) of the most heavily reviewed, well-rated products, and then extracting the absolute best based on their final average rating.
+
+
+The top five best selling products are presented in each case.
 \begin{itemize}
     \item Appliances:
         \begin{enumerate}
@@ -357,7 +386,7 @@ Lastly, the progress of the average product rating throughout the years is shown
     \centering
     \includegraphics[width=\textwidth]{images/avg_rating_distr/avg_rating_video_games.png}
 \end{figure}
-It is evident that there were far too few reviews before 2012 for almost all the categories, as there is an acute fluctuation of the average rating (which is expected, since not many people were using the Internet on a daily basis). However, in almost all categories, there is a point after which the average rating stabilizes around a certain value. This is the common pattern after some years of strong fluctuation due to the smaller number of reviews in the early years.
+It is evident that there were far too few reviews before 2012 for almost all categories, resulting in an acute fluctuation of the average rating (which is expected, as e-commerce participation and the culture of leaving online reviews were much less prevalent at the time). However, in almost all categories, there is a distinct point after which the average rating stabilizes around a certain value. This stabilization is the common pattern following the initial years of strong volatility caused by the low volume of reviews.
 
 
 \subsection{Sentiment Analysis Methodology}
@@ -456,7 +485,16 @@ def compute_vader_sentiment(text):
 By applying the string slice \texttt{[:1000]}, only the first 1000 characters of each review are processed to extract the sentiment. This choice conserved significant computational resources and time, as the datasets contained some extremely long reviews. Furthermore, since VADER's algorithm relies on lexicon and rule-based heuristics, evaluating the first 150 to 200 words (roughly 1000 characters) is generally more than sufficient to accurately capture the overall polarity of a text.
 
 \subsection{Results: Ratings vs. Sentiment}
-This section focuses on analyzing the correlation between the numerical rating (1 to 5 stars) and the calculated sentiment score of the textual reviews across all product categories. These relationships are visualized below using heatmaps, where warmer colors (e.g., red) indicate a higher concentration of reviews, and cooler colors (e.g., blue) represent lower frequencies.
+This section focuses on analyzing the correlation between the numerical rating (1 to 5 stars) and the calculated sentiment score of the textual reviews across all product categories. These relationships are visualized below using heatmaps, where warmer colors (e.g., red) indicate a higher concentration of reviews, and cooler colors (e.g., blue) represent lower frequencies.\newline
+
+When generating the correlation heatmaps, an important visual optimization was applied to the color scale mapping:
+\begin{lstlisting}[language=Python]
+heatmap_data = df.pivot_table(index='sentiment_bin', columns='rating', aggfunc='size', fill_value=0)
+sns.heatmap(heatmap_data, cmap='coolwarm', annot=True, fmt='d', linewidths=.5, vmin=0, vmax=len(df)/30)
+
+\end{lstlisting}
+Because the dataset is heavily imbalanced towards positive (5-star) reviews, an auto-scaled heatmap would assign the maximum "hot" color exclusively to the top-right cell, washing out the variance in all other cells (rendering them entirely blue). By artificially capping the maximum color threshold (\texttt{vmax=len(df)/30}), the color distribution is properly saturated. This design choice highlights the contrast and density variations among the moderately populated cells, rather than solely emphasizing the absolute maximum.
+
 
 \begin{figure}[H]
     \centering
@@ -480,7 +518,7 @@ This section focuses on analyzing the correlation between the numerical rating (
 \end{figure}
 
 
-As illustrated in the heatmaps, there is a strong positive correlation between the extracted sentiment scores and the numerical ratings. High-density "hot" zones corresponding to high ratings paired with high sentiment, and low ratings paired with low sentiment capture the vast majority of the reviews. Conversely, low-density ``cold'' zones represent the rare instances where a user's numerical rating does not align with the textual sentiment of their review. Across all categories, the heatmaps consistently exhibit warmer colors along the expected diagonal (top-right and bottom-left quadrants) and cooler colors in the off-diagonal areas (top-left and bottom-right). This distribution strictly aligns with our initial expectations, notwithstanding a few natural outliers.
+As illustrated in the heatmaps, there is a strong positive correlation between the extracted sentiment scores and the numerical ratings. High-density ``hot'' zones---corresponding to high ratings paired with high sentiment, and low ratings paired with low sentiment---capture the vast majority of the reviews. Conversely, low-density ``cold'' zones represent the rare instances where a user's numerical rating does not align with the textual sentiment of their review. Across all categories, the heatmaps consistently exhibit warmer colors along the expected diagonal (top-left and bottom-right quadrants) and cooler colors in the off-diagonal areas (top-right and bottom-left). This distribution strictly aligns with our initial expectations, notwithstanding a few natural outliers.
 
 % ===================================================================
 % PART 2
@@ -489,7 +527,7 @@ As illustrated in the heatmaps, there is a strong positive correlation between t
 \section{Part 2: Product Analysis, Clustering and Market Basket Mining}
 
 \subsection{Introduction to Part 2}
-In this second part of the project 
+Overview of the objectives of Part 2, including product-level text processing, clustering, recommendation logic, and association rule mining.
 
 \subsection{Dataset Preparation and Text Pre-Processing}
 Description of the pre-processing pipeline applied to product metadata and review text.
