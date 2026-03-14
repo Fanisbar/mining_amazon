@@ -1,4 +1,5 @@
-Data mining project for amazon's datasets. Work in progress
+Data mining project for amazon's datasets.
+!!! Work in progress !!!
 
 Μπαρμπαρόσος Θεοφάνης: 1115202200107
 
@@ -8,23 +9,3 @@ Data mining project for amazon's datasets. Work in progress
 
 
 timespan: May'96 - Sep'23
-
-
-Εξηγήσεις:  
-
-Ο λόγος που έχουμε overlap στο clustering, δηλαδή clusters που κάνουν blend ο ένας με τον άλλο και όχι
-ιδιαίτερα ψηλό silhouette score είναι επειδή είναι nlp task και το κείμενο πολύ συχνά κάνει overlap σε νοήματα
-κλπ, επίσης όταν αυξάνονται οι διαστάσεις(tf idf features, η ευκλείδια απόσταση χάνει το νόημά της)
-να χρησιμοποιήσω το curse of dimensionality για αν το εξηγήσω
-
-Ο λόλος που το k range ξεκινάει από 5 είναι επειδή παρατηρήθηκε ότι αν ξεκινούσαμε κάτω από 5 τότε δύο κατηγορίες
-έβρισκαν βέλτιστο k το 4 και κάποια clusters ήταν σχεδόν άδεια που σημαίνει ότι το ιδανικό θα ήταν είτε
-λιγότερα clusters(που δεν θα είχε νόημα) είτε περισσότερα. Οπότε ορίζοντας υποχρεωτικά κατ'ελάχιστο 5 clusters
-πετυχαίνουμε καλό αποτέλεσμα clustering
-
-Στα frequent patterns οι κανόνες μπορεί να μοιάζουν α->β και β->α αλλά δεν μπορούμε να εκτυπώνουμε εναλλαξ διότι η
-ταξινόμηση κατά lift δεν εγγυάται σειρά και αν δύο ζεύγη έχουν το ίδιο lift μπορεί η σειρά τους να είναι mixed
-και έτσι να χάσουμε ένα ζεύγος αν εκτυπώνουμε εναλλάξ
-
-TODO:
-ίδιο format στα best και στα worst selling products
